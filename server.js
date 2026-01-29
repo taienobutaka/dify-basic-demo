@@ -11,8 +11,8 @@ const PORT = process.env.PORT || 3000;
 const DIFY_API_KEY = process.env.DIFY_API_KEY;
 
 // Basic認証（要件通り固定）
-const BASIC_USER = "demo";
-const BASIC_PASS = "demo";
+const BASIC_USER = process.env.BASIC_USER || "demo";
+const BASIC_PASS = process.env.BASIC_PASS || "demo";
 
 // ====== middleware ======
 app.use(express.json());
@@ -26,7 +26,7 @@ app.use((req, res, next) => {
     return res.status(401).send("Authentication required.");
   }
 
-  const encoded = auth.split(" ")[1];
+  const encoded = auth.split(" ")[1] || "";
   const decoded = Buffer.from(encoded, "base64").toString("utf-8");
   const [user, pass] = decoded.split(":");
 
