@@ -72,15 +72,15 @@ app.post("/api/analyze", async (req, res) => {
 
     const data = await response.json();
 
-    // Difyがエラー返した場合も分かるようにステータスを反映
-    if (!response.ok) {
-      return res.status(response.status).json({
-        error: "Dify API error",
-        details: data,
-      });
-    }
+    // Difyの返答本体は data.answer に入ってる
+    let answer = data.answer;
 
-    return res.json(data);
+    // answer が JSON文字列ならオブジェクトにして返す（できなければ文字列のまま）
+    try {
+      answer = JSON.parse(answer);
+    } catch (e) {}
+
+    return res.json(answer);
   } catch (e) {
     return res.status(500).json({ error: "Server error", details: String(e) });
   }
